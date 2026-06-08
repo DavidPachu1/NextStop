@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; }
+}
+
+@layer components {
+  /* Fondo "noche de viaje": base oscura con manchas de luz cálida tipo atardecer
+     + textura de grano sutil + líneas de ruta de vuelo decorativas */
+  .gradient-hero {
+    position: relative;
+    background-color: #0b1120;
+    background-image:
+      radial-gradient(ellipse 70% 55% at 15% 0%, rgba(251, 146, 60, 0.30), transparent 60%),
+      radial-gradient(ellipse 65% 60% at 100% 20%, rgba(56, 189, 248, 0.22), transparent 60%),
+      radial-gradient(ellipse 75% 65% at 30% 110%, rgba(232, 121, 249, 0.16), transparent 60%),
+      radial-gradient(ellipse 50% 50% at 85% 100%, rgba(244, 114, 182, 0.14), transparent 65%);
+    overflow: hidden;
+  }
+
+  /* Textura de grano (ruido SVG) por encima del gradiente */
+  .gradient-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  /* Rutas de vuelo punteadas decorativas */
+  .gradient-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image:
+      radial-gradient(circle at 18% 28%, rgba(255,255,255,0.55) 0 2px, transparent 2px),
+      radial-gradient(circle at 82% 18%, rgba(255,255,255,0.4) 0 2px, transparent 2px),
+      radial-gradient(circle at 70% 78%, rgba(255,255,255,0.4) 0 2px, transparent 2px),
+      linear-gradient(115deg, transparent 49.4%, rgba(255,255,255,0.22) 49.7%, rgba(255,255,255,0.22) 50%, transparent 50.3%);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 14px 14px;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    -webkit-mask-image: linear-gradient(120deg, transparent 8%, black 28%, black 72%, transparent 92%);
+    mask-image: linear-gradient(120deg, transparent 8%, black 28%, black 72%, transparent 92%);
+  }
+
+  .gradient-hero > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .card-shadow {
+    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 4px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .card-shadow:hover {
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.16), 0 2px 8px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .shimmer-bg {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+  }
+
+  .style-btn {
+    @apply flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 border-transparent
+           transition-all duration-200 cursor-pointer text-center;
+  }
+  .style-btn:hover {
+    @apply border-brand-500 bg-brand-50;
+    transform: scale(1.04);
+  }
+  .style-btn.active {
+    @apply border-brand-500 bg-brand-50 text-brand-700;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Scroll bar personalizado */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+
+/* Estilos de impresión: el botón "Exportar PDF" usa window.print(), que vuelca
+   todas las secciones del itinerario en lugar de solo la pestaña activa. */
+@media print {
+  @page { margin: 1.5cm; }
+  body { background: #fff; }
+  .min-h-screen { min-height: 0; }
+  .sticky { position: static; }
+  .card-shadow, .shadow-sm, .shadow-lg, .shadow-2xl, .shadow {
+    box-shadow: none !important;
+  }
+  .animate-fade-in, .animate-slide-up {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "nextstop-backend",
+  "version": "1.0.0",
+  "description": "NextStop – API de generación de planes de viaje con 4 agentes IA en paralelo",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon --watch src --ext js src/server.js",
+    "mcp": "node src/mcp/server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.36.0",
+    "@modelcontextprotocol/sdk": "^1.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
