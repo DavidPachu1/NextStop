@@ -22,14 +22,12 @@ RESPONDE ÚNICAMENTE con un JSON válido con esta estructura (sin texto adiciona
 {
   "transporte": [
     {
-      "emoji": "string",
       "titulo": "string",
       "detalle": "string (info práctica con precios y cómo hacerlo)"
     }
   ],
   "costumbres": [
     {
-      "emoji": "string",
       "titulo": "string",
       "detalle": "string"
     }

@@ -25,32 +25,10 @@ RESPONDE ÚNICAMENTE con un JSON válido con esta estructura (sin texto adiciona
       "precio_persona": "string (ej: '12-18€')",
       "especialidad": "string (plato o producto estrella)",
       "cuando_ir": "desayuno | almuerzo | cena | copas | cualquiera",
-      "ambiente": "string (familiar, íntimo, animado, romántico...)",
       "por_que": "string (por qué es especial este lugar)",
       "emoji": "string"
     }
   ],
-  "por_momento": {
-    "desayuno": {
-      "nombre": "string",
-      "descripcion": "string",
-      "precio_persona": "string",
-      "emoji": "string"
-    },
-    "almuerzo": {
-      "nombre": "string",
-      "descripcion": "string",
-      "precio_persona": "string",
-      "emoji": "string"
-    },
-    "cena_especial": {
-      "nombre": "string",
-      "descripcion": "string",
-      "precio_persona": "string",
-      "emoji": "string"
-    }
-  },
-  "platos_tipicos": ["string (plato o bebida típica que probar sí o sí)"],
   "donde_no_ir": "string (aviso honesto sobre zonas turísticas caras o de baja calidad)"
 }`;
 

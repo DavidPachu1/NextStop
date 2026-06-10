@@ -528,6 +528,27 @@ export const DEMO_PLAN = {
       "Booking / Airbnb: alojamiento",
     ],
   },
+  equipaje: {
+    documentos: [
+      "DNI o Pasaporte — obligatorio para alojamiento y vuelo",
+      "Tarjeta sanitaria europea (TSEE) — atención médica gratuita en España",
+      "Confirmaciones de hotel y vuelos descargadas offline",
+    ],
+    ropa: [
+      { categoria: "Día a día", items: ["3-4 camisetas o tops", "2 pantalones (uno vaquero)", "1 sudadera o chaqueta ligera para las noches", "Ropa interior (1 por día + 1 extra)"] },
+      { categoria: "Playa (opcional)", items: ["Bañador o bikini si vas a la Barceloneta", "Pareo o ropa de playa"] },
+      { categoria: "Noche y salir", items: ["1-2 looks para salir por el Born o Eixample", "Camisa o blusa arreglada"] },
+      { categoria: "Calzado", items: ["Zapatillas cómodas — los adoquines del Gótico son duros", "Calzado más arreglado para cenar o salir de noche"] },
+    ],
+    tecnologia: ["Cargador europeo tipo C/F", "Power bank — los días son largos", "Auriculares para el metro L9"],
+    salud_higiene: ["Protector solar (el sol mediterráneo de verano aprieta)", "Ibuprofeno y paracetamol", "Tiritas", "Medicación habitual con receta de sobra"],
+    esenciales: [
+      "Cuidado con los carteristas en Las Ramblas y el metro — bolso cruzado al pecho siempre",
+      "Tarjeta T-Casual de 10 viajes (12.15€) — cómprala nada más llegar para ahorrar en metro y bus",
+      "Efectivo (30-40€) para mercados, bares pequeños y El Encants",
+    ],
+    consejo_maleta: "Para 4-5 días en Barcelona, una mochila de cabina (40L) o maleta de cabina funciona perfecto. La L9 del aeropuerto va directo al centro — sin taxis caros.",
+  },
   presupuesto: {
     total_estimado: 1200,
     por_dia: 240,

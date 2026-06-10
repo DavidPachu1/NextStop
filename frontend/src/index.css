@@ -97,6 +97,10 @@
   100% { background-position: 200% 0; }
 }
 
+/* Oculta scrollbar manteniendo el scroll funcional */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* Scroll bar personalizado */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }

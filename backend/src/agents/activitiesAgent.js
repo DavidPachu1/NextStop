@@ -20,7 +20,6 @@ INSTRUCCIONES:
 
 RESPONDE ÚNICAMENTE con un JSON válido con esta estructura (sin texto adicional):
 {
-  "imprescindibles": ["string (top 5 cosas que NO hay que perderse)"],
   "itinerario": [
     {
       "dia": 1,
@@ -32,8 +31,7 @@ RESPONDE ÚNICAMENTE con un JSON válido con esta estructura (sin texto adiciona
             "descripcion": "string (qué verás, por qué vale la pena, dato curioso)",
             "duracion": "string",
             "precio": "string",
-            "emoji": "string",
-            "tipo": "string"
+            "emoji": "string"
           }
         ],
         "consejo": "string (tip práctico: mejor hora, cómo llegar, qué llevar...)"

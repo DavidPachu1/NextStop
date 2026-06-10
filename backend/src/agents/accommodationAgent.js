@@ -15,7 +15,6 @@ RESPONDE ÚNICAMENTE con un JSON válido con esta estructura exacta (sin texto a
     {
       "nombre": "string",
       "descripcion": "string (por qué es buena zona, qué tiene cerca)",
-      "ideal_para": "string (qué tipo de viajero)",
       "nivel_precio": "económico | medio | alto",
       "precio_rango": "string (ej: '60-100€/noche')",
       "emoji": "string"
@@ -28,8 +27,7 @@ RESPONDE ÚNICAMENTE con un JSON válido con esta estructura exacta (sin texto a
       "zona": "string",
       "precio_noche": "string",
       "descripcion": "string",
-      "puntos_fuertes": ["string", "string"],
-      "emoji": "string"
+      "puntos_fuertes": ["string", "string"]
     }
   ],
   "recomendacion": {

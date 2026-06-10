@@ -10,7 +10,7 @@ export async function runDemoMode({ destination, days, budget, style }, emit) {
   const { data: base, name: matchedName } = selectDestination(destination);
   console.log(`[DEMO MODE] "${destination}" → datos de ${matchedName}`);
 
-  emit('status', { message: `Lanzando 4 agentes para ${destination}...`, progress: 5 });
+  emit('status', { message: `Lanzando 5 agentes para ${destination}...`, progress: 5 });
   await sleep(800);
 
   emit('status', { message: 'Agentes iniciados, buscando información...', progress: 15 });
@@ -18,21 +18,25 @@ export async function runDemoMode({ destination, days, budget, style }, emit) {
 
   // Simula que el agente de actividades termina primero
   await sleep(2000);
-  emit('agent_complete', { agent: 'actividades', progress: 38 });
+  emit('agent_complete', { agent: 'actividades', progress: 30 });
 
   // Luego restaurantes
   await sleep(1500);
-  emit('agent_complete', { agent: 'restaurantes', progress: 56 });
+  emit('agent_complete', { agent: 'restaurantes', progress: 45 });
 
   // Luego alojamiento
   await sleep(1800);
-  emit('agent_complete', { agent: 'alojamiento', progress: 74 });
+  emit('agent_complete', { agent: 'alojamiento', progress: 60 });
 
-  emit('status', { message: 'Calculando presupuesto y tips...', progress: 80 });
+  emit('status', { message: 'Calculando presupuesto y equipaje...', progress: 70 });
 
-  // Por último tips
+  // Tips
   await sleep(1400);
-  emit('agent_complete', { agent: 'tips', progress: 92 });
+  emit('agent_complete', { agent: 'tips', progress: 75 });
+
+  // Por último equipaje
+  await sleep(1000);
+  emit('agent_complete', { agent: 'equipaje', progress: 90 });
 
   emit('status', { message: 'Combinando resultados...', progress: 95 });
   await sleep(600);

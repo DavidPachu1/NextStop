@@ -2,9 +2,10 @@ import { runAccommodationAgent } from './accommodationAgent.js';
 import { runActivitiesAgent } from './activitiesAgent.js';
 import { runRestaurantsAgent } from './restaurantsAgent.js';
 import { runTipsAgent } from './tipsAgent.js';
+import { runPackingAgent } from './equipajeAgent.js';
 
 /**
- * Ejecuta los 4 agentes en paralelo y combina sus resultados en un plan de viaje unificado.
+ * Ejecuta los 5 agentes en paralelo y combina sus resultados en un plan de viaje unificado.
  * @param {Object} params - { destination, days, budget, style }
  * @param {Function} onEvent - callback(event, data) para streaming SSE
  */
@@ -12,17 +13,16 @@ export async function generateTravelPlan(params, onEvent) {
   const { destination, days, budget, style } = params;
   const emit = onEvent || (() => {});
 
-  emit('status', { message: `Lanzando 4 agentes para ${destination}...`, progress: 5 });
+  emit('status', { message: `Lanzando 5 agentes para ${destination}...`, progress: 5 });
 
-  const agentNames = ['alojamiento', 'actividades', 'restaurantes', 'tips'];
-  const completed = { alojamiento: false, actividades: false, restaurantes: false, tips: false };
+  const completed = { alojamiento: false, actividades: false, restaurantes: false, tips: false, equipaje: false };
 
   const withProgress = (name, promise) =>
     promise
       .then((result) => {
         completed[name] = true;
         const done = Object.values(completed).filter(Boolean).length;
-        emit('agent_complete', { agent: name, progress: 20 + done * 18 });
+        emit('agent_complete', { agent: name, progress: 15 + done * 15 });
         return result;
       })
       .catch((err) => {
@@ -31,22 +31,23 @@ export async function generateTravelPlan(params, onEvent) {
         return null;
       });
 
-  const [accommodation, activities, restaurants, tips] = await Promise.all([
+  const [accommodation, activities, restaurants, tips, packing] = await Promise.all([
     withProgress('alojamiento', runAccommodationAgent({ destination, days, budget, style })),
     withProgress('actividades', runActivitiesAgent({ destination, days, budget, style })),
     withProgress('restaurantes', runRestaurantsAgent({ destination, days, budget, style })),
     withProgress('tips', runTipsAgent({ destination, days, budget, style })),
+    withProgress('equipaje', runPackingAgent({ destination, days, budget, style })),
   ]);
 
   emit('status', { message: 'Combinando resultados...', progress: 92 });
 
-  const plan = buildPlan({ destination, days, budget, style, accommodation, activities, restaurants, tips });
+  const plan = buildPlan({ destination, days, budget, style, accommodation, activities, restaurants, tips, packing });
 
   emit('status', { message: '¡Tu plan está listo!', progress: 100 });
   return plan;
 }
 
-function buildPlan({ destination, days, budget, style, accommodation, activities, restaurants, tips }) {
+function buildPlan({ destination, days, budget, style, accommodation, activities, restaurants, tips, packing }) {
   const itinerary = buildItinerary({ activities, restaurants, days });
 
   return {
@@ -59,9 +60,10 @@ function buildPlan({ destination, days, budget, style, accommodation, activities
     },
     itinerario: itinerary,
     alojamiento: accommodation || defaultAccommodation(destination),
-    restaurantes: restaurants || { destacados: [], por_momento: {} },
+    restaurantes: restaurants || { destacados: [] },
     tips: tips || { transporte: [], costumbres: [], mejor_epoca: '', presupuesto: {} },
     presupuesto: tips?.presupuesto || buildDefaultBudget(budget, days),
+    equipaje: packing || null,
   };
 }
 

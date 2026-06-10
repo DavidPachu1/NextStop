@@ -3,6 +3,7 @@ const AGENTS = [
   { id: 'actividades', emoji: '🎭', label: 'Agente Actividades', desc: 'Diseñando tu itinerario día a día...' },
   { id: 'restaurantes', emoji: '🍽️', label: 'Agente Restaurantes', desc: 'Encontrando los mejores sitios para comer...' },
   { id: 'tips', emoji: '💡', label: 'Agente Tips', desc: 'Recopilando consejos prácticos y presupuesto...' },
+  { id: 'equipaje', emoji: '🧳', label: 'Agente Equipaje', desc: 'Preparando tu lista de maleta personalizada...' },
 ];
 
 export default function LoadingScreen({ status }) {
@@ -31,7 +32,7 @@ export default function LoadingScreen({ status }) {
       </div>
 
       {/* Agent cards */}
-      <div className="grid grid-cols-2 gap-4 w-full max-w-lg">
+      <div className="flex flex-wrap justify-center gap-4 w-full max-w-xl">
         {AGENTS.map((agent) => {
           const done = completedAgents.includes(agent.id);
           const active = !done && progress > 5;
@@ -39,7 +40,7 @@ export default function LoadingScreen({ status }) {
           return (
             <div
               key={agent.id}
-              className={`glass rounded-2xl p-4 text-white transition-all duration-500 ${
+              className={`glass rounded-2xl p-4 text-white transition-all duration-500 w-[calc(50%-8px)] sm:w-[calc(33.33%-11px)] ${
                 done ? 'bg-white/25 scale-[1.02]' : active ? 'bg-white/10' : 'bg-white/5 opacity-60'
               }`}
             >

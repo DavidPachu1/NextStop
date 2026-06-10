@@ -1,4 +1,9 @@
 import { useState } from 'react';
+import { relativeTime } from '../utils/planHistory.js';
+
+const STYLE_LABELS_SHORT = {
+  cultural: 'Cultural', gastronomia: 'Gastro', fiesta: 'Fiesta', relax: 'Relax', aventura: 'Aventura',
+};
 
 const STYLES = [
   { id: 'cultural', emoji: '🏛️', label: 'Cultural', desc: 'Historia, arte y museos' },
@@ -8,10 +13,73 @@ const STYLES = [
   { id: 'aventura', emoji: '🏔️', label: 'Aventura', desc: 'Adrenalina y naturaleza' },
 ];
 
-export default function TravelForm({ onGenerate }) {
+function HistoryModal({ history, onLoad, onDelete, onClose }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <div
+        className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-slide-up"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="font-bold text-gray-900">Viajes guardados</h2>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
+
+        {history.length === 0 ? (
+          <div className="px-6 py-12 text-center text-gray-400">
+            <p className="text-3xl mb-2">🗺️</p>
+            <p className="text-sm">Aún no tienes viajes guardados</p>
+          </div>
+        ) : (
+          <div className="overflow-y-auto max-h-[60vh]">
+            {history.map((entry) => (
+              <div
+                key={entry.id}
+                className="flex items-center justify-between px-6 py-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors group"
+                onClick={() => { onLoad(entry.plan); onClose(); }}
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-gray-900 truncate">{entry.destino}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {entry.dias} días · {STYLE_LABELS_SHORT[entry.estilo] || entry.estilo} · {entry.presupuesto?.toLocaleString('es-ES')}€
+                  </p>
+                  <p className="text-xs text-gray-400">{relativeTime(entry.savedAt)}</p>
+                </div>
+                <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+                  <span className="text-xs text-brand-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Cargar →
+                  </span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onDelete(entry.id); }}
+                    className="text-gray-300 hover:text-red-400 transition-colors p-1"
+                    title="Eliminar"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function TravelForm({ onGenerate, history = [], onLoadHistory, onDeleteHistory }) {
   const [form, setForm] = useState({ destination: '', days: 5, budget: 1000, style: '' });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showHistory, setShowHistory] = useState(false);
 
   const validate = () => {
     const e = {};
@@ -33,7 +101,6 @@ export default function TravelForm({ onGenerate }) {
 
   const set = (key, val) => setForm((f) => ({ ...f, [key]: val }));
 
-  // Permite vaciar el campo (sin forzarlo a 0) y evita ceros a la izquierda tipo "05"
   const setNumber = (key, raw) => {
     if (raw === '') return set(key, '');
     const cleaned = raw.replace(/^0+(?=\d)/, '');
@@ -44,7 +111,15 @@ export default function TravelForm({ onGenerate }) {
   return (
     <div className="min-h-screen gradient-hero flex flex-col">
       {/* Header */}
-      <header className="pt-12 pb-6 px-6 text-center text-white">
+      <header className="pt-12 pb-6 px-6 text-center text-white relative">
+        {history.length > 0 && (
+          <button
+            onClick={() => setShowHistory(true)}
+            className="absolute right-6 top-12 z-10 glass rounded-full px-3 py-1.5 text-xs font-semibold hover:bg-white/20 transition-colors flex items-center gap-1.5"
+          >
+            🗂️ <span>Mis viajes ({history.length})</span>
+          </button>
+        )}
         <h1 className="font-display text-5xl md:text-7xl font-bold mb-3 tracking-tight drop-shadow-lg">
           NextStop
         </h1>
@@ -110,7 +185,7 @@ export default function TravelForm({ onGenerate }) {
             <label className="block text-sm font-semibold text-gray-700 mb-3">
               🎯 Estilo de viaje
             </label>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
               {STYLES.map((s) => (
                 <button
                   key={s.id}
@@ -143,7 +218,6 @@ export default function TravelForm({ onGenerate }) {
             style={{ background: 'linear-gradient(135deg, #0b1120 0%, #1e1b4b 55%, #4338ca 100%)' }}
             className="group relative w-full py-4 rounded-2xl font-bold text-lg text-white overflow-hidden border border-white/10 shadow-lg transition-shadow duration-300 hover:shadow-xl hover:shadow-coral-500/20 active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {/* destello cálido que recorre el botón al pasar el cursor, como un sello de embarque */}
             <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-coral-400/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
             <span className="relative inline-flex items-center justify-center gap-2.5">
               {loading ? (
@@ -158,10 +232,20 @@ export default function TravelForm({ onGenerate }) {
           </button>
 
           <p className="mt-4 text-center text-xs text-gray-400">
-            4 agentes IA trabajarán simultáneamente · Puede tardar 30-60 segundos
+            5 agentes IA trabajarán simultáneamente · Puede tardar 45-60 segundos
           </p>
         </div>
       </main>
+
+      {/* History modal */}
+      {showHistory && (
+        <HistoryModal
+          history={history}
+          onLoad={onLoadHistory}
+          onDelete={onDeleteHistory}
+          onClose={() => setShowHistory(false)}
+        />
+      )}
     </div>
   );
 }

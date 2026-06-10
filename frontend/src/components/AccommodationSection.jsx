@@ -1,4 +1,8 @@
-export default function AccommodationSection({ alojamiento }) {
+function mapsUrl(name, location) {
+  return `https://www.google.com/maps/search/${encodeURIComponent(`${name} ${location}`)}`;
+}
+
+export default function AccommodationSection({ alojamiento, destino = '' }) {
   if (!alojamiento) return null;
 
   const { zonas = [], opciones = [], recomendacion } = alojamiento;
@@ -54,11 +58,22 @@ export default function AccommodationSection({ alojamiento }) {
                     <span className="text-sm font-bold text-coral-500 flex-shrink-0">{op.precio_noche}</span>
                   )}
                 </div>
-                {op.tipo && (
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium capitalize">
-                    {op.tipo}
-                  </span>
-                )}
+                <div className="flex flex-wrap items-center gap-2 mt-1">
+                  {op.tipo && (
+                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium capitalize">
+                      {op.tipo}
+                    </span>
+                  )}
+                  <a
+                    href={mapsUrl(op.nombre, op.zona || destino)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-brand-600 hover:text-brand-700 font-medium"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Ver en Google Maps →
+                  </a>
+                </div>
                 {op.descripcion && <p className="text-xs text-gray-600 mt-1">{op.descripcion}</p>}
                 {op.puntos_fuertes?.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">

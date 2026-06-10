@@ -4,6 +4,8 @@ import AccommodationSection from './AccommodationSection.jsx';
 import TipsSection from './TipsSection.jsx';
 import BudgetSummary from './BudgetSummary.jsx';
 import MapSection from './MapSection.jsx';
+import PackingSection from './PackingSection.jsx';
+import WeatherWidget from './WeatherWidget.jsx';
 import { sharePlan } from '../utils/exportPlan.js';
 
 const STYLE_LABELS = {
@@ -20,12 +22,13 @@ const TABS = [
   { id: 'accommodation', label: '🏨 Alojamiento' },
   { id: 'tips', label: '💡 Tips' },
   { id: 'budget', label: '💰 Presupuesto' },
+  { id: 'packing', label: '🧳 Equipaje' },
 ];
 
 export default function ItineraryView({ plan, onReset }) {
   const [activeTab, setActiveTab] = useState('itinerary');
   const [shareNotice, setShareNotice] = useState('');
-  const { metadata, itinerario = [], alojamiento, restaurantes, tips, presupuesto } = plan;
+  const { metadata, itinerario = [], alojamiento, restaurantes, tips, presupuesto, equipaje } = plan;
 
   const handleShare = async () => {
     try {
@@ -60,22 +63,22 @@ export default function ItineraryView({ plan, onReset }) {
           <div className="mb-6 flex items-center justify-between gap-2">
             <button
               onClick={onReset}
-              className="inline-flex items-center gap-1.5 glass rounded-full px-4 py-2 text-sm font-medium hover:bg-white/20 transition-colors"
+              className="inline-flex items-center gap-1.5 glass rounded-full px-3 sm:px-4 py-2 text-sm font-medium hover:bg-white/20 transition-colors"
             >
-              ← Nuevo plan
+              ← <span className="hidden sm:inline">Nuevo plan</span><span className="sm:hidden">Volver</span>
             </button>
             <div className="flex items-center gap-2 relative">
               <button
                 onClick={handleShare}
-                className="inline-flex items-center gap-1.5 glass rounded-full px-4 py-2 text-sm font-medium hover:bg-white/20 transition-colors"
+                className="inline-flex items-center gap-1.5 glass rounded-full px-3 sm:px-4 py-2 text-sm font-medium hover:bg-white/20 transition-colors"
               >
-                🔗 Compartir
+                🔗 <span className="hidden sm:inline">Compartir</span>
               </button>
               <button
                 onClick={handleExportPdf}
-                className="inline-flex items-center gap-1.5 glass rounded-full px-4 py-2 text-sm font-medium hover:bg-white/20 transition-colors"
+                className="inline-flex items-center gap-1.5 glass rounded-full px-3 sm:px-4 py-2 text-sm font-medium hover:bg-white/20 transition-colors"
               >
-                📄 Exportar PDF
+                📄 PDF
               </button>
               {shareNotice && (
                 <span className="absolute top-full right-0 mt-2 whitespace-nowrap glass rounded-full px-3 py-1.5 text-xs font-medium animate-fade-in">
@@ -134,6 +137,7 @@ export default function ItineraryView({ plan, onReset }) {
       <main className="max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 py-8 print:py-4">
         <section className={`${activeTab === 'itinerary' ? 'block' : 'hidden'} print:block animate-fade-in print:mb-8`}>
           <h2 className="hidden print:block text-lg font-bold mb-3">🗓️ Itinerario</h2>
+          <WeatherWidget destination={metadata?.destino} />
           <div className="space-y-4">
             {itinerario.length > 0 ? (
               itinerario.map((day, i) => (
@@ -154,17 +158,22 @@ export default function ItineraryView({ plan, onReset }) {
 
         <section className={`${activeTab === 'accommodation' ? 'block' : 'hidden'} print:block animate-fade-in print:mb-8`}>
           <h2 className="hidden print:block text-lg font-bold mb-3">🏨 Alojamiento</h2>
-          <AccommodationSection alojamiento={alojamiento} />
+          <AccommodationSection alojamiento={alojamiento} destino={metadata?.destino} />
         </section>
 
         <section className={`${activeTab === 'tips' ? 'block' : 'hidden'} print:block animate-fade-in print:mb-8`}>
           <h2 className="hidden print:block text-lg font-bold mb-3">💡 Tips</h2>
-          <TipsSection tips={tips} restaurantes={restaurantes} />
+          <TipsSection tips={tips} restaurantes={restaurantes} destino={metadata?.destino} />
         </section>
 
         <section className={`${activeTab === 'budget' ? 'block' : 'hidden'} print:block animate-fade-in print:mb-8`}>
           <h2 className="hidden print:block text-lg font-bold mb-3">💰 Presupuesto</h2>
           <BudgetSummary presupuesto={presupuesto} />
+        </section>
+
+        <section className={`${activeTab === 'packing' ? 'block' : 'hidden'} print:block animate-fade-in print:mb-8`}>
+          <h2 className="hidden print:block text-lg font-bold mb-3">🧳 Equipaje</h2>
+          <PackingSection equipaje={equipaje} />
         </section>
 
         {/* Footer */}

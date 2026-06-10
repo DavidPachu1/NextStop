@@ -2,11 +2,13 @@ import { useState, useCallback } from 'react';
 import TravelForm from './components/TravelForm.jsx';
 import LoadingScreen from './components/LoadingScreen.jsx';
 import ItineraryView from './components/ItineraryView.jsx';
+import { savePlan, getHistory, deletePlan } from './utils/planHistory.js';
 
 export default function App() {
   const [phase, setPhase] = useState('form'); // 'form' | 'loading' | 'result'
   const [plan, setPlan] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState({ message: '', progress: 0, completedAgents: [] });
+  const [history, setHistory] = useState(getHistory);
 
   const handleGenerate = useCallback(async (params) => {
     setPhase('loading');
@@ -48,6 +50,8 @@ export default function App() {
 
             if (event === 'plan_complete') {
               es.close();
+              savePlan(data);
+              setHistory(getHistory());
               setPlan(data);
               setPhase('result');
               resolve();
@@ -77,9 +81,26 @@ export default function App() {
     setLoadingStatus({ message: '', progress: 0, completedAgents: [] });
   }, []);
 
+  const handleLoadHistory = useCallback((savedPlan) => {
+    setPlan(savedPlan);
+    setPhase('result');
+  }, []);
+
+  const handleDeleteHistory = useCallback((id) => {
+    deletePlan(id);
+    setHistory(getHistory());
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {phase === 'form' && <TravelForm onGenerate={handleGenerate} />}
+      {phase === 'form' && (
+        <TravelForm
+          onGenerate={handleGenerate}
+          history={history}
+          onLoadHistory={handleLoadHistory}
+          onDeleteHistory={handleDeleteHistory}
+        />
+      )}
       {phase === 'loading' && <LoadingScreen status={loadingStatus} />}
       {phase === 'result' && plan && <ItineraryView plan={plan} onReset={handleReset} />}
     </div>

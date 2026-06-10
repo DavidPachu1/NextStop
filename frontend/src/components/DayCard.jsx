@@ -47,12 +47,24 @@ function ActivityItem({ act }) {
 
 function RestaurantBadge({ restaurant }) {
   if (!restaurant) return null;
+  const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(`${restaurant.nombre} ${restaurant.zona || ''}`)}`;
   return (
     <div className="mt-3 p-3 rounded-xl bg-white/70 border border-white/50">
       <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
         Cena recomendada
       </p>
-      <p className="font-bold text-gray-900 text-sm">{restaurant.nombre}</p>
+      <div className="flex items-start justify-between gap-2">
+        <p className="font-bold text-gray-900 text-sm">{restaurant.nombre}</p>
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-brand-600 hover:text-brand-700 font-medium flex-shrink-0"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Maps →
+        </a>
+      </div>
       {restaurant.especialidad && (
         <p className="text-xs text-gray-600">{restaurant.especialidad}</p>
       )}

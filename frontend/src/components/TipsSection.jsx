@@ -1,4 +1,8 @@
-export default function TipsSection({ tips, restaurantes }) {
+function mapsUrl(name, location) {
+  return `https://www.google.com/maps/search/${encodeURIComponent(`${name} ${location}`)}`;
+}
+
+export default function TipsSection({ tips, restaurantes, destino = '' }) {
   if (!tips && !restaurantes) return null;
 
   const transporte = tips?.transporte || [];
@@ -58,13 +62,21 @@ export default function TipsSection({ tips, restaurantes }) {
                     <span className="text-sm font-bold text-coral-500 flex-shrink-0">{r.precio_persona}</span>
                   )}
                 </div>
-                <div className="flex flex-wrap gap-2 mt-1">
+                <div className="flex flex-wrap items-center gap-2 mt-1">
                   {r.zona && <span className="text-xs text-gray-500">{r.zona}</span>}
                   {r.tipo && (
                     <span className="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full font-medium">
                       {r.tipo}
                     </span>
                   )}
+                  <a
+                    href={mapsUrl(r.nombre, r.zona || destino)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-brand-600 hover:text-brand-700 font-medium"
+                  >
+                    Ver en Google Maps →
+                  </a>
                 </div>
                 {r.especialidad && (
                   <p className="text-xs text-gray-600 mt-1">
