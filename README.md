@@ -12,12 +12,13 @@
 
 ## ✨ Qué hace
 
-Rellenas un formulario (destino, número de días, presupuesto y estilo de viaje) y **4 agentes de IA trabajan en paralelo**, cada uno especializado en una parte del plan:
+Rellenas un formulario (destino, número de días, presupuesto y estilo de viaje) y **5 agentes de IA trabajan en paralelo**, cada uno especializado en una parte del plan:
 
 - 🏨 **Alojamiento** — mejores zonas, hoteles y rangos de precio
 - 🗓️ **Actividades** — itinerario día a día dividido en mañana / tarde / noche
 - 🍽️ **Restaurantes** — sitios destacados por zona, especialidad y precio
 - 💶 **Tips & presupuesto** — transporte, costumbres locales, frases útiles y desglose de gastos con consejos de ahorro
+-  **Alojamiento** — equipaje de acorde al destino elegido
 
 Cada agente consulta información actualizada mediante **búsqueda web en tiempo real (Tavily)**, y el resultado se combina y se transmite al frontend en streaming (SSE), mostrando el itinerario a medida que se genera — con mapa interactivo incluido.
 
