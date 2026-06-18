@@ -1,6 +1,6 @@
 # 🧭 NextStop — Tu viaje a medida en un clic
 
-> Generador de itinerarios de viaje con IA: una arquitectura **multiagente** (Claude) que orquesta búsqueda web en tiempo real para combinar alojamiento, actividades, restaurantes y presupuesto en un plan de viaje personalizado, en cuestión de segundos.
+> Generador de itinerarios de viaje con IA: una arquitectura **multiagente** (Claude) que orquesta búsqueda web en tiempo real para combinar alojamiento, actividades, restaurantes, presupuesto en un plan de viaje personalizado y equipaje necesario para tu viaje, en cuestión de segundos.
 
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white&labelColor=20232a)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js&logoColor=white)
@@ -57,6 +57,7 @@ NextStop/
 │           ├── activitiesAgent.js    # Agente actividades
 │           ├── restaurantsAgent.js   # Agente restaurantes
 │           ├── tipsAgent.js          # Agente tips + presupuesto
+│           ├── equipajeAgent.js      # Agente equipaje
 │           └── index.js              # Orquestador (Promise.all)
 └── frontend/
     ├── vite.config.js
